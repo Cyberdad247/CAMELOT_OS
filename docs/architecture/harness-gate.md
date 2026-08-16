@@ -110,6 +110,7 @@ Local record of gate executions. The authoritative full history is the GitHub Ac
 | 2026-08-15 | `bash harness/gate.sh` (after signed anchors + `golden-anchor-0000.json`) | ✅ PASS | — | Anchor records ed25519-signed; golden set self-contained (receipts + anchors + golden anchor + pubkey + marker). |
 | 2026-08-15 | `validate_contract_schemas.py` | ✅ PASS | — | 26/26 schemas meta-validate as Draft 2020-12; catalog conformance OK. |
 | 2026-08-15 | `bash harness/gate.sh` (current HEAD) | ✅ PASS | — | All four checks green; per-check logs under `harness/results/`. |
+| 2026-08-15 | GitHub Actions run `31919777711` (manual dispatch) | ✅ PASS | — | First live CI run on `Cyberdad247/CAMELOT_OS` (repo created 2026-08-15, badge wired). |
 
 **Maintenance:** after a gate-relevant change, run the full gate locally and append a row with the exact command/config and result. New PASS rows must carry the promoting operator's sign-off (see §3); `—` marks rows recorded before the sign-off requirement. Keep expected-failure rows from tamper drills (sign-off `n/a`) — they document the gate's detection coverage.
 
