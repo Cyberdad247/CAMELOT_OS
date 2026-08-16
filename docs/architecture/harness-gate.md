@@ -1,7 +1,7 @@
 # Camelot-OS — Harness Gate Checklist
 
-![harness-gate status](https://github.com/Cyberdad247/CAMELOT_OS/actions/workflows/harness-gate.yml/badge.svg)
-*Badge reflects the latest run of `.github/workflows/harness-gate.yml` on the default branch of `Cyberdad247/CAMELOT_OS`; full run history lives on the Actions tab and offline in §5. (Update this URL if the workflow file is renamed or the repo moves.)*
+![harness-gate status](https://github.com/Cyberdad247/Camelot-Ecosystem/actions/workflows/harness-gate.yml/badge.svg)
+*Badge reflects the latest run of `.github/workflows/harness-gate.yml` on the default branch of `Cyberdad247/Camelot-Ecosystem` (the harness gate's live home since 2026-08-15; the package repo `Cyberdad247/CAMELOT_OS` runs the same gate on its own pushes). Full run history lives on the Actions tab and offline in §5. (Update this URL if the workflow file is renamed or the repo moves.)*
 
 **Canonical source of:** the harness CI gate — `harness/run_all.py` (logic), `harness/gate.sh` (CI wrapper), `.github/workflows/harness-gate.yml` (GitHub Actions).
 **Scope:** the published contract family (`packages/contracts/`) and the §11.3 receipt-chain harness (`harness/`). Every build / PR / release must clear this gate before promotion.
@@ -111,6 +111,7 @@ Local record of gate executions. The authoritative full history is the GitHub Ac
 | 2026-08-15 | `validate_contract_schemas.py` | ✅ PASS | — | 26/26 schemas meta-validate as Draft 2020-12; catalog conformance OK. |
 | 2026-08-15 | `bash harness/gate.sh` (current HEAD) | ✅ PASS | — | All four checks green; per-check logs under `harness/results/`. |
 | 2026-08-15 | GitHub Actions run `31919777711` (manual dispatch) | ✅ PASS | — | First live CI run on `Cyberdad247/CAMELOT_OS` (repo created 2026-08-15, badge wired). |
+| 2026-08-15 | push-triggered run on `Cyberdad247/Camelot-Ecosystem` | ✅ PASS | — | Gate relocated to the ecosystem repo (contracts catalog 3→26 superset merge; `.pem` committed after the `*.pem` ignore dropped it on the first CI run). |
 
 **Maintenance:** after a gate-relevant change, run the full gate locally and append a row with the exact command/config and result. New PASS rows must carry the promoting operator's sign-off (see §3); `—` marks rows recorded before the sign-off requirement. Keep expected-failure rows from tamper drills (sign-off `n/a`) — they document the gate's detection coverage.
 

@@ -1,6 +1,6 @@
 # Camelot-OS v.100000.15 — Contracts, Harness & Architecture
 
-[![harness-gate status](https://github.com/Cyberdad247/CAMELOT_OS/actions/workflows/harness-gate.yml/badge.svg)](https://github.com/Cyberdad247/CAMELOT_OS/actions/workflows/harness-gate.yml)
+[![harness-gate status](https://github.com/Cyberdad247/Camelot-Ecosystem/actions/workflows/harness-gate.yml/badge.svg)](https://github.com/Cyberdad247/Camelot-Ecosystem/actions/workflows/harness-gate.yml)
 
 The v1.2 documentation, contract, and evaluation package of **Camelot-OS / Cybertronia** — a local-first, federated, policy-governed enterprise execution fabric. This repository ships the published contract schemas, the harness that verifies them, and the canonical architecture documents they implement.
 
