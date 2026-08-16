@@ -99,7 +99,7 @@ Signed-off-by: <operator name / role> <yyyy-mm-dd>
 
 ## 5. Gate run history
 
-Local record of gate executions. The authoritative full history is the GitHub Actions **workflow runs** page once the package is hosted; this table is the offline record. Append a row after every gate-relevant change, and record expected-failure (negative) runs too — they are the evidence that detection works.
+Local record of gate executions. The authoritative full history is the GitHub Actions **workflow runs** page on `Cyberdad247/Camelot-Ecosystem` (the gate's live home) and `Cyberdad247/CAMELOT_OS` (the package repo); this table is the offline record. Append a row after every gate-relevant change, and record expected-failure (negative) runs too — they are the evidence that detection works.
 
 | Date | Command / config | Result | Signed off by | Notes |
 |------|------------------|--------|---------------|-------|
@@ -112,6 +112,8 @@ Local record of gate executions. The authoritative full history is the GitHub Ac
 | 2026-08-15 | `bash harness/gate.sh` (current HEAD) | ✅ PASS | — | All four checks green; per-check logs under `harness/results/`. |
 | 2026-08-15 | GitHub Actions run `31919777711` (manual dispatch) | ✅ PASS | — | First live CI run on `Cyberdad247/CAMELOT_OS` (repo created 2026-08-15, badge wired). |
 | 2026-08-15 | push-triggered run on `Cyberdad247/Camelot-Ecosystem` | ✅ PASS | — | Gate relocated to the ecosystem repo (contracts catalog 3→26 superset merge; `.pem` committed after the `*.pem` ignore dropped it on the first CI run). |
+| 2026-08-15 | `c044b71` push to `Cyberdad247/Camelot-Ecosystem` | ❌ FAIL | — | `replay-committed` blocked: repo `*.pem` ignore dropped `sentinel_test_public.pem` from the commit → fixed by an explicit `!` exception (`e1e5343`). |
+| 2026-08-15 | branch protection on `Cyberdad247/Camelot-Ecosystem` `main` | ✅ enforced | — | Required check `Contract harness (receipts + schemas)` (strict, incl. admins); force-push + deletions blocked. |
 
 **Maintenance:** after a gate-relevant change, run the full gate locally and append a row with the exact command/config and result. New PASS rows must carry the promoting operator's sign-off (see §3); `—` marks rows recorded before the sign-off requirement. Keep expected-failure rows from tamper drills (sign-off `n/a`) — they document the gate's detection coverage.
 
