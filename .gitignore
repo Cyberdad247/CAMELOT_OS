@@ -1,0 +1,6 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Harness result logs (regenerable; CI retains them as artifacts)
+harness/results/*.log
