@@ -19,6 +19,16 @@ The v1.2 documentation, contract, and evaluation package of **Camelot-OS / Cyber
 | `harness/` | Verification harness: receipt-chain verifier, schema meta-validator, run-all gate, committed golden set |
 | `.github/workflows/` | CI — `harness-gate.yml` runs the full gate on every push / PR |
 
+### Where the fixtures live
+
+The STRIDE model and the repo-alignment doc reference a fixture tree — **`harness/fixtures/`** — covering all 25 mandatory §22.1 adversarial fixtures plus 4 operator-console fixtures (29 dirs total, each with a README citing its production gate and SADD section). Those fixtures are part of the **live implementation repo**, not this package:
+
+- **Local:** `C:\Users\vizio\CAMELOT_OS\harness\fixtures\`
+- **GitHub:** `Cyberdad247/CAMELOT_OS` (the package's live home)
+- **Canonical map:** [`docs/architecture/repo-alignment.md`](docs/architecture/repo-alignment.md) §3 and [`docs/threat-models/stride.md`](docs/threat-models/stride.md) §16
+
+This package deliberately ships only the docs, contract schemas, and verification harness; the fixtures stay in the live tree they exercise.
+
 ## Contract schemas
 
 All 26 schemas in `packages/contracts/` declare `$schema: https://json-schema.org/draft/2020-12/schema`, are self-contained (no external `$ref`s), and are cross-checked against the catalog. Families include `camelot-receipt/1`, `camelot-receipt-chain/1`, `camelot-task/1`, `camelot-tenant/1`, and more — covering receipts, ledger anchoring, workloads, policy decisions, personas, and the rest of the §11 contract catalog.

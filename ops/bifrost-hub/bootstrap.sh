@@ -37,18 +37,18 @@ id "$ADMIN_USER" >/dev/null 2>&1 || { echo "error: user '$ADMIN_USER' does not e
 
 export DEBIAN_FRONTEND=noninteractive
 
-log "Phase 1/5 — base packages (minimal, per plan)"
+log "Phase 1/6 — base packages (minimal, per plan)"
 apt-get update -qq
 apt-get install -y -qq \
   curl ca-certificates gnupg \
   sqlite3 age ufw fail2ban unattended-upgrades
 
-log "Phase 2/5 — Tailscale (private admin plane)"
+log "Phase 2/6 — Tailscale (private admin plane)"
 curl -fsSL https://tailscale.com/install.sh | sh
 tailscale up --authkey "$TS_AUTHKEY" --hostname "$TS_HOSTNAME"
 TS_IP="$(tailscale ip -4 | head -n1)"
 
-log "Phase 3/5 — control-plane layout + SQLite"
+log "Phase 3/6 — control-plane layout + SQLite"
 mkdir -p "$APP_DIR"/{bin,bifrost,sentinel,scheduler,registry,receipts,data} \
          "$BACKUP_DIR"
 chown -R "$ADMIN_USER":"$ADMIN_USER" "$APP_DIR" "$BACKUP_DIR"
@@ -64,7 +64,7 @@ Encrypted nightly snapshots: /opt/camelot/backups (age-encrypted).
 MD
 chown "$ADMIN_USER":"$ADMIN_USER" "$APP_DIR/data/README.md"
 
-log "Phase 4/5 — firewall: no public ingress after bootstrap"
+log "Phase 4/6 — firewall: no public ingress after bootstrap"
 ufw default deny incoming
 ufw default allow outgoing
 # SSH only from the Tailscale CGNAT range (100.64.0.0/10); drop public SSH.
