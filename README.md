@@ -17,6 +17,7 @@ The v1.2 documentation, contract, and evaluation package of **Camelot-OS / Cyber
 | `docs/threat-models/` | STRIDE threat model with fixture → production-gate traceability |
 | `packages/contracts/` | **26 published JSON Schemas** (Draft 2020-12, `camelot-*/1` families) + catalog `index.json` |
 | `harness/` | Verification harness: receipt-chain verifier, schema meta-validator, run-all gate, committed golden set |
+| `ops/bifrost-hub/` | Bifrost Hub control-plane bootstrap: init/bootstrap scripts, 3 hardened systemd services (registry, receipt, scheduler), deployment README |
 | `.github/workflows/` | CI — `harness-gate.yml` runs the full gate on every push / PR |
 
 ### Where the fixtures live
