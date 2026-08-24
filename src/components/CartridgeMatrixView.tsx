@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { SovereignCartridge, ThemeMode } from '../types';
 import { multiVoiceRouter } from '../services/multiVoiceRouter';
 import { SovereignHeraldry } from './SovereignHeraldry';
+import { VpsDigitalTwin } from './VpsDigitalTwin';
 
 interface CartridgeMatrixViewProps {
   theme: ThemeMode;
@@ -34,6 +35,29 @@ const DEFAULT_CARTRIDGES: SovereignCartridge[] = [
       targetPlatform: '8GB Edge Node / Cleveland Node'
     },
     description: 'Sovereign flagship cartridge unifying Ouroboros 1.58-bit SSM, Kahn-Z3 topological DAG validation, and Triple-QFT Semantic Anchor Compression into a sub-second hot-swappable A2UI runtime.'
+  },
+  {
+    id: 'CRTR-Ω-06',
+    code: 'VPS-DYNAMIC-TWIN-vMAX',
+    name: 'VPS Dynamic Digital Twin (vMAX)',
+    version: '10000.54.1-ASCENDED',
+    themeIdentified: 'Spatial WebGPU Infrastructure Hologram & Nginx Telemetry',
+    mantraCrystal: 'VPS_TWIN::WEBGPU(OCTAHEDRON)+SSE(PROMETHEUS)⊢A2UI(60:30:10)→Δt<400ms',
+    leadKnights: ['ANYA_Ω', 'SIR_VISAGE', 'SIR_STITCH', 'SIR_HYDRON', 'SIR_CODEX'],
+    division: 'Core Engineering & Vanguard',
+    targetLatencyMs: 240,
+    memoryFootprintMb: 168.0,
+    memoryRecurrence: 'WebGPU-Normalized-V_R3',
+    topologicalValidator: 'L7-Constitutional-Scarcity-SMT',
+    qftCompressionFactor: 5.10,
+    color: '#00E5FF',
+    status: 'STANDBY',
+    payloadSchema: {
+      endpoints: ['Nginx_Reverse_Proxy', 'Prometheus_Grafana_Mimir', 'Node_RAM_8GB_Clamp'],
+      renderTarget: 'React_Three_Fiber_Canvas_WebGPU',
+      dohertyThresholdMs: 400
+    },
+    description: 'vMAX Dynamic Digital Twin mapping Nginx Reverse Proxy, Prometheus metrics, and ML-KEM-768 quantum handshakes onto an interactive 3D WebGPU wireframe core.'
   },
   {
     id: 'CRTR-Ω-02',
@@ -132,7 +156,7 @@ export function CartridgeMatrixView({ theme, onKineticTrigger, onSwitchTab }: Ca
   const isDark = theme === 'dark';
   const [cartridges, setCartridges] = useState<SovereignCartridge[]>(DEFAULT_CARTRIDGES);
   const [activeCartridgeId, setActiveCartridgeId] = useState<string>('CRTR-Ω-01');
-  const [activeSubTab, setActiveSubTab] = useState<'slot' | 'ouroboros' | 'z3-kahn' | 'triple-qft' | 'json-rom'>('slot');
+  const [activeSubTab, setActiveSubTab] = useState<'slot' | 'vps-twin' | 'ouroboros' | 'z3-kahn' | 'triple-qft' | 'json-rom'>('slot');
   const [isTransfiguring, setIsTransfiguring] = useState<boolean>(false);
   const [transfigureProgress, setTransfigureProgress] = useState<number>(100);
 
@@ -367,6 +391,7 @@ export function CartridgeMatrixView({ theme, onKineticTrigger, onSwitchTab }: Ca
       <div className={`flex space-x-2 border-b mb-6 pb-2 overflow-x-auto ${isDark ? 'border-neutral-800' : 'border-slate-200'}`}>
         {[
           { id: 'slot', label: '🕹️ Hot-Swap Slot & Vault', badge: `${cartridges.length} Cartridges` },
+          { id: 'vps-twin', label: '🌐 VPS Dynamic Twin (vMAX)', badge: 'WebGPU 3D' },
           { id: 'ouroboros', label: '1. Ouroboros 1.58b SSM', badge: 'O(1) Memory' },
           { id: 'z3-kahn', label: "2. Z3 Kahn's DAG Gate", badge: 'Topological SAT' },
           { id: 'triple-qft', label: '3. Triple-QFT & SAC', badge: 'Δt < 400ms' },
@@ -580,6 +605,13 @@ export function CartridgeMatrixView({ theme, onKineticTrigger, onSwitchTab }: Ca
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Sub-Tab: VPS Dynamic Twin (vMAX) Full Spatial Dashboard */}
+      {activeSubTab === 'vps-twin' && (
+        <div className="space-y-4">
+          <VpsDigitalTwin theme={theme} onKineticTrigger={onKineticTrigger} />
         </div>
       )}
 

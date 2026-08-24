@@ -1,0 +1,35 @@
+##### [CARTRIDGE_IDENTIFIER: VPS_DYNAMIC_TWIN_vMAX]
+##### [CORE_ENGINE: CAMELOT_OS_v10000.54]
+##### [RUNTIME_PROFILE: 8GB_EDGE_NODE_WEBGPU_OPTIMIZED]
+
+cartridge_manifest:
+  name: "VPS Digital Twin UI/UX"
+  version: "vMAX-ASCENDED"
+  classification: "INFRASTRUCTURE_TELEMETRY_AND_OPTICS"
+  lead_knights: ["ANYA_Ω", "SIR_VISAGE", "SIR_STITCH", "SIR_HYDRON", "SIR_CODEX"]
+  
+  chromatic_tokens:
+    void_canvas: "#050508"
+    surface_obsidian: "#121217"
+    surface_frosted: "#1A1D26"
+    matrix_cyan: "#00E5FF"
+    amber_diagnostic: "#FF6B00"
+    glass_border: "rgba(0, 229, 255, 0.25)"
+    glass_border_amber: "rgba(255, 107, 0, 0.35)"
+
+  spatial_rules:
+    grid_system: "12-column-fluid"
+    spacing_rhythm: "8pt"
+    doherty_threshold_ms: 400
+    cls_limit: 0.00
+    ratio_60_30_10: true
+
+  telemetry_bindings:
+    endpoints: 
+      - "Nginx_Reverse_Proxy"
+      - "Prometheus_Grafana_Mimir"
+      - "VictoriaMetrics_SSE"
+      - "Node_RAM_Scarcity_Clamp"
+      - "ML_KEM_768_Handshakes"
+    render_target: "React_Three_Fiber_Canvas_WebGPU"
+    spatial_normalization: "V_subset_R3"

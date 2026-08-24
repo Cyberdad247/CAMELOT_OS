@@ -20,6 +20,8 @@ export function loadAllVfsFiles(): VfsFile[] {
 
     let domain = 'Sovereign VFS';
     if (filename.includes('Preflight') || filename.includes('protocols')) domain = 'Governance_&_Integrity';
+    else if (filename.includes('task')) domain = 'DAG_Kinetic_Swarm';
+    else if (filename.includes('verification')) domain = 'Formal_Z3_Verification';
     else if (filename.includes('agent') || filename.includes('knight')) domain = 'Swarm_Definitions';
     else if (filename.includes('skills')) domain = 'Execution_Capabilities';
     else if (filename.includes('harness') || filename.includes('mcp')) domain = 'Kinetic_Boundaries';
@@ -36,6 +38,10 @@ export function loadAllVfsFiles(): VfsFile[] {
     else if (filename.includes('merlinss')) domain = 'Saga_Execution';
     else if (filename.includes('kickbox')) domain = 'Enterprise_Cartridge';
 
+    let description = `Sovereign VFS Node: ${filename.replace('.md', '')}`;
+    if (filename === 'task.md') description = 'VFS NODE 03: DAG Multi-Agent Kinetic Swarm Orchestration Lattice [SIR_CODEX]';
+    else if (filename === 'verification.md') description = 'VFS NODE 04: Z3 & SymPy Formal Neurosymbolic Verification Engine [SIR_BORIS]';
+
     result.push({
       path: cleanPath,
       name: filename,
@@ -43,7 +49,7 @@ export function loadAllVfsFiles(): VfsFile[] {
       category: 'vfs-core',
       content: content as string,
       isMarkdown: true,
-      description: `Sovereign VFS Node: ${filename.replace('.md', '')}`
+      description
     });
   });
 
@@ -415,6 +421,68 @@ sudo ./deploy/install.sh
       description: cartridgeFile.description
     });
   }
+
+  // 7. VFS NODE 03 & 04 Shadow Forge Worktree Nodes
+  const shadowNodes = [
+    {
+      path: '/.shadow_forge_worktree/task.md',
+      name: 'task.md',
+      domain: 'DAG_Kinetic_Swarm',
+      category: 'vfs-core' as const,
+      content: `# 💾 VFS NODE 03: \`task.md\` (DAG_BIO_KINETIC_SWARM)
+**[AUTHOR]: SIR_CODEX (The Kinetic Hand)**
+
+\`\`\`text
+@dag|MULTI_AGENT_ORCHESTRATION_LATTICE
+@mode|PARALLEL_FAN_OUT
+
+[EXECUTION_NODES]
+node_A|SIR_HELIO|INGEST_AND_PLAN|TRIPLE_QFT_DISTILLATION
+node_B|SIR_CODEX|AST_SCAFFOLDING|GENERATE_CRUD_LOGIC_IN_SUB_30S [1]
+node_C|SIR_BORIS|WORKTREE_SHADOW_SPAWN|COMPILE_VIABLE_PATCH_DIFF [2]
+node_D|SIR_GIDEON|TEST_DRIVEN_DEV|MAP_FAILING_ASSERT_BLOCKS [2]
+
+[LIFECYCLE_TOPOLOGY]
+route|NDR+S_GENESIS_LOOP|Planning_to_Build
+flow|User_Intent->Helio->Boris->Codex->Sentinel->Merge [3]
+sandbox|ISOLATE_INSIDE_SHADOW_FORGE_WORKTREE|./.shadow_forge_worktree/ [1]
+\`\`\``,
+      isMarkdown: true,
+      description: 'VFS NODE 03: DAG Multi-Agent Kinetic Swarm Orchestration Lattice [SIR_CODEX]'
+    },
+    {
+      path: '/.shadow_forge_worktree/verification.md',
+      name: 'verification.md',
+      domain: 'Formal_Z3_Verification',
+      category: 'vfs-core' as const,
+      content: `# 💾 VFS NODE 04: \`verification.md\` (Z3_SATISFIABILITY)
+**[AUTHOR]: SIR_BORIS (The Iron Anvil)**
+
+\`\`\`text
+@proof|Z3_SYMPY_NEUROSYMBOLIC_BRIDGE
+@engine|FORMAL_VERIFICATION
+
+[MATHEMATICAL_GUARANTEES]
+V1|PROVABLE_GUARANTEE|Move security from reactive pattern-matching to provable mathematical guarantee [4].
+V2|PDG_VERIFICATION|Mathematical Proofing of Program Dependency Graphs
+V3|ERROR_THRESHOLD|Max_Error < 0.7%
+
+[QUALITY_GATE_TELEMETRY]
+metric_1|LLM_AS_A_JUDGE|Independent verification score required for every parallel patch [3].
+metric_2|IOSM_ALIGNMENT|Require overall IOSM Alignment Index >= 0.85 before merging back into root [3].
+metric_3|LCP_BOUNDARY|Largest Contentful Paint boundary limits check out under 1.1s over WebGL components [2].
+\`\`\``,
+      isMarkdown: true,
+      description: 'VFS NODE 04: Z3 & SymPy Formal Neurosymbolic Verification Engine [SIR_BORIS]'
+    }
+  ];
+
+  shadowNodes.forEach((node) => {
+    if (!seenPaths.has(node.path)) {
+      seenPaths.add(node.path);
+      result.push(node);
+    }
+  });
 
   return result;
 }

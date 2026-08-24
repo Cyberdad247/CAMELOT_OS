@@ -16,12 +16,16 @@ import { CommandCenterView } from './components/CommandCenterView';
 import { DigitalFactoryView } from './components/DigitalFactoryView';
 import { MultiVoiceRouterDeck } from './components/MultiVoiceRouterDeck';
 import { CartridgeMatrixView } from './components/CartridgeMatrixView';
+import { ArthurianVSPGateway } from './components/ArthurianVSPGateway';
+import { RoundTableDeck } from './components/RoundTableDeck';
+import { AudioWorkbenchView } from './components/AudioWorkbenchView';
+import { ShadowVmTestGauntlet } from './components/ShadowVmTestGauntlet';
 import { multiVoiceRouter } from './services/multiVoiceRouter';
 
 export function App() {
   const [allFiles, setAllFiles] = useState<VfsFile[]>([]);
   const [selectedFile, setSelectedFile] = useState<VfsFile | null>(null);
-  const [activeTab, setActiveTab] = useState<ActiveTab>('command-center');
+  const [activeTab, setActiveTab] = useState<ActiveTab>('gateway');
   const [theme, setTheme] = useState<ThemeMode>('dark');
   const [gateModalOpen, setGateModalOpen] = useState(false);
   const [gateActionPending, setGateActionPending] = useState<string | null>(null);
@@ -334,6 +338,41 @@ STATUS: WebGPU/WebGL 60 FPS NOMINAL`
 
       {/* Main Workspace Area */}
       <div className="flex-1 flex overflow-hidden">
+        {activeTab === 'gateway' && (
+          <ArthurianVSPGateway
+            onNavigate={(tab) => setActiveTab(tab)}
+            onKineticTrigger={handleKineticTrigger}
+            theme={theme}
+          />
+        )}
+
+        {activeTab === 'round-table' && (
+          <div className="flex-1 p-4 sm:p-6 overflow-y-auto">
+            <RoundTableDeck
+              theme={theme}
+              onKineticTrigger={handleKineticTrigger}
+            />
+          </div>
+        )}
+
+        {activeTab === 'audio-workbench' && (
+          <div className="flex-1 p-4 sm:p-6 overflow-y-auto">
+            <AudioWorkbenchView
+              theme={theme}
+              onKineticTrigger={handleKineticTrigger}
+            />
+          </div>
+        )}
+
+        {activeTab === 'shadow-gauntlet' && (
+          <div className="flex-1 p-4 sm:p-6 overflow-y-auto">
+            <ShadowVmTestGauntlet
+              theme={theme}
+              onKineticTrigger={handleKineticTrigger}
+            />
+          </div>
+        )}
+
         {activeTab === 'command-center' && (
           <CommandCenterView
             theme={theme}

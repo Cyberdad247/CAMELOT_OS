@@ -33,7 +33,23 @@ export interface TerminalLog {
   metadata?: Record<string, any>;
 }
 
-export type ActiveTab = 'command-center' | 'cartridge-matrix' | 'digital-factory' | 'multivoice' | 'spatial-hud' | 'vfs' | 'terminal' | 'htmx' | 'lattice' | 'knights' | 'contracts' | 'constitution';
+export type ActiveTab = 
+  | 'gateway' 
+  | 'round-table'
+  | 'audio-workbench'
+  | 'shadow-gauntlet'
+  | 'command-center' 
+  | 'cartridge-matrix' 
+  | 'digital-factory' 
+  | 'multivoice' 
+  | 'spatial-hud' 
+  | 'vfs' 
+  | 'terminal' 
+  | 'htmx' 
+  | 'lattice' 
+  | 'knights' 
+  | 'contracts' 
+  | 'constitution';
 
 export type ThemeMode = 'dark' | 'light';
 
