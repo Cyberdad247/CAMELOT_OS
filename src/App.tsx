@@ -1,176 +1,435 @@
-import React, { useState } from 'react';
-import { Shield, FileJson, CheckCircle, Search, FileText, Database, BookOpen } from 'lucide-react';
-import Markdown from 'react-markdown';
+import React, { useState, useEffect } from 'react';
+import { loadAllVfsFiles } from './data/vfsData';
+import { KNIGHTS_ROSTER } from './data/knightsData';
+import { VfsFile, ActiveTab, TerminalLog, Knight, ThemeMode } from './types';
+import { HeaderHUD } from './components/HeaderHUD';
+import { VfsExplorer } from './components/VfsExplorer';
+import { InteractiveTerminal } from './components/InteractiveTerminal';
+import { SwarmLatticeVisualizer } from './components/SwarmLatticeVisualizer';
+import { KnightRosterView } from './components/KnightRosterView';
+import { ContractSchemasView } from './components/ContractSchemasView';
+import { ConstitutionalView } from './components/ConstitutionalView';
+import { ConstitutionalGateModal } from './components/ConstitutionalGateModal';
+import { HtmxCommandCenterView } from './components/HtmxCommandCenterView';
+import { SpatialHolographicHUD } from './components/SpatialHolographicHUD';
+import { CommandCenterView } from './components/CommandCenterView';
+import { DigitalFactoryView } from './components/DigitalFactoryView';
+import { MultiVoiceRouterDeck } from './components/MultiVoiceRouterDeck';
+import { CartridgeMatrixView } from './components/CartridgeMatrixView';
+import { multiVoiceRouter } from './services/multiVoiceRouter';
 
-const schemaFiles = import.meta.glob(['../packages/contracts/*.json', '../harness/golden-receipts/*.json'], { eager: true, query: '?raw', import: 'default' });
-const markdownFiles = import.meta.glob(['../*.md', '../docs/**/*.md'], { eager: true, query: '?raw', import: 'default' });
+export function App() {
+  const [allFiles, setAllFiles] = useState<VfsFile[]>([]);
+  const [selectedFile, setSelectedFile] = useState<VfsFile | null>(null);
+  const [activeTab, setActiveTab] = useState<ActiveTab>('command-center');
+  const [theme, setTheme] = useState<ThemeMode>('dark');
+  const [gateModalOpen, setGateModalOpen] = useState(false);
+  const [gateActionPending, setGateActionPending] = useState<string | null>(null);
 
-interface SchemaData {
-  name: string;
-  content: string;
-  parsed?: any;
-  isMarkdown?: boolean;
-}
+  // Initial rich terminal logs
+  const [terminalLogs, setTerminalLogs] = useState<TerminalLog[]>([
+    {
+      id: 'log-1',
+      timestamp: '00.000s',
+      sender: 'ANYA_Ω',
+      level: 'INFO',
+      message: 'Ingress intercepted. APEE v7.0 Triage completed. Anya First Law enforced.',
+      codeBlock: '{"status": "INGRESS_SCRUBBED", "entropy": 0.000, "hypervisor": "L7_GATE"}'
+    },
+    {
+      id: 'log-2',
+      timestamp: '00.024s',
+      sender: 'MERLIN_Ω',
+      level: 'SUCCESS',
+      message: 'Master Ignition DAG compiled. VFS Master Scaffold vMAX crystals generated.',
+      codeBlock: '@ctx|camelot-os.dev/ukg/v1000/vfs_scaffold @typ|Sovereign_VFS_Manifest id|OMNI_VFS_FORGE'
+    },
+    {
+      id: 'log-3',
+      timestamp: '00.048s',
+      sender: 'SIR_CODEX',
+      level: 'INFO',
+      message: '20 Sovereign VFS nodes physicalized to local edge node (C:\\Users\\vizio\\CAMELOT_OS\\.agent\\). Isomorphic FileTree Law asserted.'
+    },
+    {
+      id: 'log-4',
+      timestamp: '00.062s',
+      sender: 'SCRIBE',
+      level: 'SUCCESS',
+      message: 'PROVENANCE_LEDGER.md seal issued. Sentinel test public keys verified.',
+      codeBlock: '⚜️_SOVEREIGN_TRUTH // [CPU: 120% OMNI_EXEC] [RAM: 7.4GB/8.0GB] [LATTICE: EXCALIBUR_V1000]'
+    }
+  ]);
 
-const schemas: SchemaData[] = Object.entries(schemaFiles).map(([path, content]) => {
-  const name = path.split('/').pop() as string;
-  let parsed = {};
-  try {
-    parsed = JSON.parse(content as string);
-  } catch (e) {
-    console.error("Failed to parse", name);
-  }
-  return { name, content: content as string, parsed, isMarkdown: false };
-});
+  // Load files on mount
+  useEffect(() => {
+    const loaded = loadAllVfsFiles();
+    setAllFiles(loaded);
+    const preflight = loaded.find(f => f.name.includes('VFS Preflight')) || loaded.find(f => f.category === 'vfs-core') || loaded[0] || null;
+    setSelectedFile(preflight);
+  }, []);
 
-const markdowns: SchemaData[] = Object.entries(markdownFiles).map(([path, content]) => {
-  const name = path.split('/').pop() as string;
-  return { name, content: content as string, isMarkdown: true };
-});
+  const addLog = (log: Omit<TerminalLog, 'id' | 'timestamp'>) => {
+    const newLog: TerminalLog = {
+      id: `log-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      timestamp: new Date().toLocaleTimeString(),
+      ...log,
+    };
+    setTerminalLogs(prev => [...prev, newLog]);
+  };
 
-const allFiles = [...markdowns, ...schemas];
+  // Kinetic Command Processor
+  const handleExecuteCommand = (command: string) => {
+    // 1. Log Operator directive
+    addLog({
+      sender: 'OPERATOR',
+      level: 'INFO',
+      message: command,
+    });
 
-function App() {
-  const [selectedSchema, setSelectedSchema] = useState<SchemaData | null>(allFiles.find(f => f.name === 'README.md') || allFiles[0] || null);
-  const [searchTerm, setSearchTerm] = useState('');
+    const trimmed = command.trim();
 
-  const filteredSchemas = allFiles.filter(s => s.name.toLowerCase().includes(searchTerm.toLowerCase()));
+    if (trimmed === '//boot') {
+      setTimeout(() => {
+        addLog({
+          sender: 'ANYA_Ω',
+          level: 'SUCCESS',
+          message: 'APEX_ONLINE // Living Notebook Virtual Simulation Terminal awakened.',
+          codeBlock: `[SYSTEM_IDENTITY]: CAMELOT-OS_OMEGA_TITAN_APEX
+[OPERATOR]: VaShawn O. Head (Vizion) | Invisioned Marketing Inc.
+[EDGE_NODE_ANCHOR]: Cleveland, Ohio, United States
+[CORE_MANDATE]: "dreams don't come true visions do"`
+        });
+        addLog({
+          sender: 'MERLIN_Ω',
+          level: 'SUCCESS',
+          message: '25-Knight Roster armed. Sub-agent dispatching pipeline receptive.'
+        });
+      }, 300);
+    } else if (trimmed === '//nano-swarm expand') {
+      setTimeout(() => {
+        addLog({
+          sender: 'MERLIN_Ω',
+          level: 'INFO',
+          message: 'Unpacking VFS_MASTER_SCAFFOLD_vMAX.yaml crystal manifest...'
+        });
+        setTimeout(() => {
+          addLog({
+            sender: 'SIR_CODEX',
+            level: 'SUCCESS',
+            message: 'All 20 sovereign VFS manifests verified and physicalized in /.agent/ directory.',
+            codeBlock: `• VFS Preflight.md
+• agents.md
+• skills.md
+• harnesses.md
+• mcp.md
+• Merlin.md
+• Anya.md
+• knight roster.md
+• worldtree.md
+• Artifacts.md
+• protocols.md
+• workflows.md
+• symbollect.md
+• camelot-os max version.md
+• digitalfactory.md
+• Inspira.md
+• HiveIDE.md
+• Blueprint-os.md
+• merlinss oftware agency.md
+• kickbox audio.md`
+          });
+        }, 500);
+      }, 200);
+    } else if (trimmed === '//sync') {
+      setTimeout(() => {
+        addLog({
+          sender: 'LADY_MNEMOSYNE',
+          level: 'SUCCESS',
+          message: 'CRDT Ledger synchronization complete with NotebookLM Worldtree Cloudbrain. Δ_drift = 0.000.'
+        });
+      }, 400);
+    } else if (trimmed === '//shield') {
+      setTimeout(() => {
+        addLog({
+          sender: 'GIDEON',
+          level: 'SUCCESS',
+          message: 'Aegis Zero-Trust isolation perimeter engaged. Kyber-768 quantum mTLS handshake active.',
+          codeBlock: 'CIPHER: KYBER-768-POST-QUANTUM | ENCLAVE: ISOLATED'
+        });
+      }, 300);
+    } else if (trimmed === '//gate') {
+      setGateActionPending('MANUAL_GATE_TRIGGER');
+      setGateModalOpen(true);
+    } else if (trimmed === '//rezero') {
+      setTimeout(() => {
+        addLog({
+          sender: 'ANYA_Ω',
+          level: 'SUCCESS',
+          message: 'Sir Syntax auto-repair executed. AST trees rezeroed to canonical baseline.'
+        });
+      }, 400);
+    } else if (trimmed === '//deploy') {
+      setTimeout(() => {
+        addLog({
+          sender: 'MERLIN_Ω',
+          level: 'SUCCESS',
+          message: 'Engineering Cartridge compiled into stateless-to-committed bundle.',
+          codeBlock: 'TARGET: Vercel Edge + Render/Tailscale mTLS | TENANT: info@kickboxaudio.com\nSEAL: ⚜️_SOVEREIGN_TRUTH'
+        });
+      }, 400);
+    } else if (trimmed === '//GO_LIVE' || trimmed === '//go_live') {
+      setTimeout(() => {
+        addLog({
+          sender: 'MERLIN_Ω',
+          level: 'SUCCESS',
+          message: 'HTMX Command Center deployed to systemd unit [camelot-htmx.service].',
+          codeBlock: `SYSTEMD UNIT: /etc/systemd/system/camelot-htmx.service
+PORT: :8080 (Docker-Free Go Binary)
+SSE STREAM: /stream [200 OK text/event-stream]
+THEME: Obsidian/Gold/Purple`
+        });
+      }, 300);
+    } else if (trimmed === '//DISPATCH' || trimmed === '//dispatch') {
+      setTimeout(() => {
+        addLog({
+          sender: 'SIR_CODEX',
+          level: 'SUCCESS',
+          message: 'Dispatched native Go + HTMX single-page package to /opt/camelot/htmx-center/.',
+          codeBlock: `• /opt/camelot/htmx-center/main.go
+• /opt/camelot/htmx-center/static/index.html
+• /opt/camelot/htmx-center/static/css/style.css
+• /opt/camelot/htmx-center/deploy/camelot-htmx.service
+• /opt/camelot/htmx-center/deploy/install.sh`
+        });
+      }, 300);
+    } else if (trimmed === '//htmx') {
+      setActiveTab('htmx');
+      addLog({
+        sender: 'SYSTEM',
+        level: 'INFO',
+        message: 'Switched to Native Go + HTMX Command Center deck.'
+      });
+    } else if (trimmed === '//spatial' || trimmed === '//hud' || trimmed.startsWith('//deploy:sir_boris')) {
+      setActiveTab('spatial-hud');
+      addLog({
+        sender: 'SIR_CODEX',
+        level: 'SUCCESS',
+        message: 'Scaffolded Holographic Spatial HUD dashboard via CopilotKit & R3F (Sir Boris Vanguard).',
+        codeBlock: `KNIGHT: Sir Boris (Chaos & Resilience Officer)
+TOOLCHAIN: Three.js / React Three Fiber + Drei + Motion + CopilotKit (AG-UI)
+GEOMETRY: 12-Column Grid + Perspective Floor + Concentric Rings
+PALETTE: Obsidian Void (#050507), Cyan (#00E5FF), Violet (#9D4EDD), Magenta (#FF007F), Gold (#E5B842)
+STATUS: WebGPU/WebGL 60 FPS NOMINAL`
+      });
+    } else if (trimmed === '//knights') {
+      setActiveTab('knights');
+      addLog({
+        sender: 'SYSTEM',
+        level: 'INFO',
+        message: 'Switched to 25-Knight Sovereign Execution Swarm deck.'
+      });
+    } else if (trimmed === '//audit') {
+      setActiveTab('constitution');
+      addLog({
+        sender: 'GIDEON',
+        level: 'INFO',
+        message: 'Constitutional 4-Pillar verification engaged.'
+      });
+    } else {
+      // General semantic directive evaluation
+      setTimeout(() => {
+        addLog({
+          sender: 'ANYA_Ω',
+          level: 'INFO',
+          message: `Directive intercepted: "${trimmed}". Processing through APEE v7.0 engine.`
+        });
+        setTimeout(() => {
+          addLog({
+            sender: 'MERLIN_Ω',
+            level: 'SUCCESS',
+            message: `Task DAG generated for: "${trimmed}". Dispatched to Bio-Kinetic microVM workers.`
+          });
+        }, 500);
+      }, 300);
+    }
+  };
+
+  const handleKineticTrigger = (trigger: string) => {
+    multiVoiceRouter.playCyberSfx('lock');
+    if (trigger === '//chaos:inject' || trigger.includes('chaos')) {
+      multiVoiceRouter.playCyberSfx('chaos');
+      multiVoiceRouter.speakAsKnight('boris', 'Chaos pulse injected into AST matrix!');
+    } else if (trigger === '//rezero') {
+      multiVoiceRouter.playCyberSfx('rezero');
+      multiVoiceRouter.speakAsKnight('anya', 'Rezeroing baseline. All nodes restored to 100% capacity.');
+    } else if (trigger === '//boot') {
+      multiVoiceRouter.playCyberSfx('boot');
+      multiVoiceRouter.speakAsKnight('arthur', 'Camelot-OS Sovereign Kernel online. Round table knights standing by.');
+    }
+    setActiveTab('terminal');
+    handleExecuteCommand(trigger);
+  };
+
+  const handleDispatchKnightTask = (knight: Knight, taskName: string) => {
+    addLog({
+      sender: 'MERLIN_Ω',
+      level: 'INFO',
+      message: `Direct DAG dispatch to [${knight.name}] (${knight.role}): ${taskName}`,
+    });
+    setTimeout(() => {
+      addLog({
+        sender: 'SCRIBE',
+        level: 'SUCCESS',
+        message: `Task ${taskName} executed successfully by ${knight.name}. Evidence envelope sealed.`,
+        codeBlock: `KNIGHT: ${knight.name} | DIVISION: ${knight.division} | LOAD: ${knight.load}%\nVERDICT: GIDEON_PASS`
+      });
+    }, 1000);
+  };
+
+  const handleConfirmGate = () => {
+    setGateModalOpen(false);
+    addLog({
+      sender: 'OPERATOR',
+      level: 'SUCCESS',
+      message: '[y] HITL Iron Gate Authorized by Operator VaShawn O. Head.',
+    });
+    addLog({
+      sender: 'GIDEON',
+      level: 'SUCCESS',
+      message: 'Gate cleared. Proceeding with sovereign execution directive.',
+    });
+  };
+
+  const handleCancelGate = () => {
+    setGateModalOpen(false);
+    addLog({
+      sender: 'OPERATOR',
+      level: 'WARN',
+      message: '[N] Directive rejected by Operator.',
+    });
+    addLog({
+      sender: 'GIDEON',
+      level: 'DANGER',
+      message: 'Action aborted. System returned to standby baseline.',
+    });
+  };
+
+  const contractFiles = allFiles.filter(f => f.category === 'contracts');
+  const goldenReceiptFiles = allFiles.filter(f => f.category === 'golden-receipts');
+  const isDark = theme === 'dark';
 
   return (
-    <div className="flex h-screen bg-neutral-50 font-sans">
-      {/* Sidebar */}
-      <div className="w-80 bg-white border-r border-neutral-200 flex flex-col h-full">
-        <div className="p-6 border-b border-neutral-200">
-          <div className="flex items-center space-x-3 mb-4">
-            <Shield className="w-8 h-8 text-neutral-900" />
-            <div>
-              <h1 className="text-xl font-semibold tracking-tight text-neutral-900">Camelot-OS</h1>
-              <p className="text-sm text-neutral-500 font-medium">Harness & Contracts</p>
-            </div>
-          </div>
-          <div className="relative">
-            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400" />
-            <input 
-              type="text" 
-              placeholder="Search schemas..." 
-              value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 bg-neutral-100 border-transparent rounded-lg text-sm focus:bg-white focus:border-neutral-300 focus:ring-2 focus:ring-neutral-200 outline-none transition-all"
+    <div className={`flex flex-col h-screen w-screen ${isDark ? 'bg-neutral-950 text-neutral-100 dark' : 'bg-slate-100 text-slate-900'} overflow-hidden font-sans selection:bg-amber-500/30 selection:text-amber-200 transition-colors duration-200`}>
+      
+      {/* Top Telemetry HUD */}
+      <HeaderHUD
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        onKineticTrigger={handleKineticTrigger}
+        vfsFileCount={allFiles.filter(f => f.category === 'vfs-core').length}
+        theme={theme}
+        setTheme={setTheme}
+      />
+
+      {/* Main Workspace Area */}
+      <div className="flex-1 flex overflow-hidden">
+        {activeTab === 'command-center' && (
+          <CommandCenterView
+            theme={theme}
+            onKineticTrigger={handleKineticTrigger}
+          />
+        )}
+
+        {activeTab === 'cartridge-matrix' && (
+          <CartridgeMatrixView
+            theme={theme}
+            onKineticTrigger={handleKineticTrigger}
+            onSwitchTab={(tab) => setActiveTab(tab as ActiveTab)}
+          />
+        )}
+
+        {activeTab === 'digital-factory' && (
+          <DigitalFactoryView
+            theme={theme}
+            onKineticTrigger={handleKineticTrigger}
+          />
+        )}
+
+        {activeTab === 'multivoice' && (
+          <div className="flex-1 p-6 overflow-y-auto">
+            <MultiVoiceRouterDeck
+              theme={theme}
+              onExecuteIntent={handleKineticTrigger}
             />
           </div>
-        </div>
-        <div className="flex-1 overflow-y-auto p-4 space-y-1">
-          {filteredSchemas.map((schema) => (
-            <button
-              key={schema.name}
-              onClick={() => setSelectedSchema(schema)}
-              className={`w-full text-left px-3 py-2.5 rounded-lg flex items-center space-x-3 transition-colors ${selectedSchema?.name === schema.name ? 'bg-neutral-900 text-white' : 'hover:bg-neutral-100 text-neutral-700'}`}
-            >
-              {schema.isMarkdown ? (
-                <BookOpen className={`w-4 h-4 ${selectedSchema?.name === schema.name ? 'text-neutral-300' : 'text-neutral-400'}`} />
-              ) : (
-                <FileJson className={`w-4 h-4 ${selectedSchema?.name === schema.name ? 'text-neutral-300' : 'text-neutral-400'}`} />
-              )}
-              <span className="text-sm font-medium truncate">{schema.name}</span>
-            </button>
-          ))}
-        </div>
-      </div>
+        )}
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col h-full overflow-hidden bg-white">
-        {selectedSchema ? (
-          <>
-            <div className="px-8 py-6 border-b border-neutral-100 flex items-center justify-between bg-white">
-              <div>
-                <h2 className="text-2xl font-semibold tracking-tight text-neutral-900">{selectedSchema.name}</h2>
-                <p className="text-sm text-neutral-500 mt-1">
-                  {selectedSchema.isMarkdown ? 'Documentation File' : (selectedSchema.parsed?.title || 'JSON Schema Definition')}
-                </p>
-              </div>
-              {!selectedSchema.isMarkdown && (
-                <div className="flex items-center space-x-2 text-sm font-medium text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full">
-                  <CheckCircle className="w-4 h-4" />
-                  <span>Validated Schema</span>
-                </div>
-              )}
-            </div>
-            <div className="flex-1 overflow-y-auto p-8 bg-neutral-50/50">
-              <div className="max-w-4xl mx-auto space-y-6">
-                
-                {selectedSchema.isMarkdown ? (
-                  <div className="bg-white p-8 rounded-xl border border-neutral-200 shadow-sm prose prose-neutral max-w-none">
-                    <Markdown>{selectedSchema.content}</Markdown>
-                  </div>
-                ) : (
-                  <>
-                    {/* Meta Info */}
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-white p-5 rounded-xl border border-neutral-200 shadow-sm">
-                        <h3 className="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-1">Schema ID</h3>
-                        <p className="text-sm font-medium text-neutral-800 break-all">{selectedSchema.parsed?.$id || 'N/A'}</p>
-                      </div>
-                      <div className="bg-white p-5 rounded-xl border border-neutral-200 shadow-sm">
-                        <h3 className="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-1">Schema Type</h3>
-                        <p className="text-sm font-medium text-neutral-800">{selectedSchema.parsed?.type || 'object'}</p>
-                      </div>
-                    </div>
+        {activeTab === 'vfs' && (
+          <VfsExplorer
+            files={allFiles}
+            selectedFile={selectedFile}
+            onSelectFile={setSelectedFile}
+            onKineticTrigger={handleKineticTrigger}
+          />
+        )}
 
-                    {/* Properties Overview */}
-                    {selectedSchema.parsed?.properties ? (
-                      <div className="bg-white rounded-xl border border-neutral-200 shadow-sm overflow-hidden">
-                        <div className="px-5 py-4 border-b border-neutral-100 bg-neutral-50/50 flex items-center space-x-2">
-                          <Database className="w-4 h-4 text-neutral-500" />
-                          <h3 className="text-sm font-semibold text-neutral-800">Properties Overview</h3>
-                        </div>
-                        <div className="divide-y divide-neutral-100">
-                          {Object.entries(selectedSchema.parsed.properties).map(([key, value]: [string, any]) => (
-                            <div key={key} className="px-5 py-3 flex items-start justify-between">
-                              <div>
-                                <span className="text-sm font-semibold text-neutral-900">{key}</span>
-                                {selectedSchema.parsed.required?.includes(key) && (
-                                  <span className="ml-2 text-[10px] font-bold text-red-600 bg-red-50 px-1.5 py-0.5 rounded uppercase tracking-wide">Required</span>
-                                )}
-                                <p className="text-xs text-neutral-500 mt-1">{value.description || 'No description provided.'}</p>
-                              </div>
-                              <div className="text-xs font-mono text-neutral-400 bg-neutral-50 px-2 py-1 rounded">
-                                {value.type || 'any'}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="bg-white p-5 rounded-xl border border-neutral-200 shadow-sm flex items-center justify-center space-x-2">
-                        <Database className="w-4 h-4 text-neutral-400" />
-                        <p className="text-sm text-neutral-500 font-medium">No properties defined or not a standard schema object.</p>
-                      </div>
-                    )}
+        {activeTab === 'htmx' && (
+          <HtmxCommandCenterView onKineticTrigger={handleKineticTrigger} />
+        )}
 
-                    {/* Raw Code */}
-                    <div className="bg-neutral-900 rounded-xl overflow-hidden shadow-lg border border-neutral-800">
-                      <div className="px-5 py-3 border-b border-neutral-800 flex items-center space-x-2 bg-neutral-950">
-                        <FileText className="w-4 h-4 text-neutral-500" />
-                        <h3 className="text-xs font-semibold text-neutral-400 uppercase tracking-wider">Raw JSON</h3>
-                      </div>
-                      <div className="p-5 overflow-x-auto">
-                        <pre className="text-sm font-mono text-neutral-300 leading-relaxed">
-                          {JSON.stringify(selectedSchema.parsed, null, 2)}
-                        </pre>
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-          </>
-        ) : (
-          <div className="flex-1 flex flex-col items-center justify-center text-neutral-400">
-            <Shield className="w-16 h-16 mb-4 text-neutral-200" />
-            <p className="text-lg font-medium text-neutral-600">Select a schema to view details</p>
-          </div>
+        {activeTab === 'spatial-hud' && (
+          <SpatialHolographicHUD 
+            onKineticTrigger={handleKineticTrigger} 
+            theme={theme}
+          />
+        )}
+
+        {activeTab === 'terminal' && (
+          <InteractiveTerminal
+            logs={terminalLogs}
+            onExecuteCommand={handleExecuteCommand}
+            onClearLogs={() => setTerminalLogs([])}
+          />
+        )}
+
+        {activeTab === 'lattice' && (
+          <SwarmLatticeVisualizer
+            onSelectKnight={(knight) => {
+              addLog({
+                sender: 'SYSTEM',
+                level: 'INFO',
+                message: `Inspected node telemetry: [${knight.name}] - ${knight.role}`,
+              });
+            }}
+          />
+        )}
+
+        {activeTab === 'knights' && (
+          <KnightRosterView onDispatchTask={handleDispatchKnightTask} />
+        )}
+
+        {activeTab === 'contracts' && (
+          <ContractSchemasView
+            contracts={contractFiles}
+            goldenReceipts={goldenReceiptFiles}
+          />
+        )}
+
+        {activeTab === 'constitution' && (
+          <ConstitutionalView />
         )}
       </div>
+
+      {/* HITL Gate Confirmation Modal */}
+      <ConstitutionalGateModal
+        isOpen={gateModalOpen}
+        onConfirm={handleConfirmGate}
+        onCancel={handleCancelGate}
+        title="HITL Iron Gate Authorization Required"
+        description="A high-risk mutation or kinetic sovereign directive requires explicit [y/N] Human-In-The-Loop confirmation from the Operator."
+      />
+
     </div>
   );
 }
