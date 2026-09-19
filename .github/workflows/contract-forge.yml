@@ -1,0 +1,41 @@
+name: Contract Forge Gate
+
+on:
+  push:
+    paths:
+      - "packages/contracts/**"
+      - "harness/contracts/validate_contract_forge.py"
+      - "docs/architecture/persona-enterprise-continuity.md"
+      - "docs/architecture/contract-forge-signing-v1.md"
+      - "docs/reference/sir-synthetos-contract-profile.md"
+      - ".github/workflows/contract-forge.yml"
+  pull_request:
+    paths:
+      - "packages/contracts/**"
+      - "harness/contracts/validate_contract_forge.py"
+      - "docs/architecture/persona-enterprise-continuity.md"
+      - "docs/architecture/contract-forge-signing-v1.md"
+      - "docs/reference/sir-synthetos-contract-profile.md"
+      - ".github/workflows/contract-forge.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contract-forge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install verifier dependencies
+        run: python -m pip install --disable-pip-version-check cryptography jsonschema
+
+      - name: Validate Contract Forge
+        run: python harness/contracts/validate_contract_forge.py
