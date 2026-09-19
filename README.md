@@ -15,7 +15,7 @@ The v1.2 documentation, contract, and evaluation package of **Camelot-OS / Cyber
 | `custodial_assimilation.md` | Assimilation crystal output derived from the repo |
 | `docs/architecture/` | Canonical architecture docs: repo alignment, harness gate checklist, open questions, trust bands, effect classes, glossary, northstar size budget |
 | `docs/threat-models/` | STRIDE threat model with fixture → production-gate traceability |
-| `packages/contracts/` | **26 published JSON Schemas** (Draft 2020-12, `camelot-*/1` families) + catalog `index.json` |
+| `packages/contracts/` | **34 published JSON Schemas** (Draft 2020-12, `camelot-*/1` families) + catalog `index.json` |
 | `harness/` | Verification harness: receipt-chain verifier, schema meta-validator, run-all gate, committed golden set |
 | `ops/bifrost-hub/` | Bifrost Hub control-plane bootstrap: init/bootstrap scripts, 3 hardened systemd services (registry, receipt, scheduler), deployment README |
 | `.github/workflows/` | CI — `harness-gate.yml` runs the full gate on every push / PR |
@@ -32,7 +32,27 @@ This package deliberately ships only the docs, contract schemas, and verificatio
 
 ## Contract schemas
 
-All 26 schemas in `packages/contracts/` declare `$schema: https://json-schema.org/draft/2020-12/schema`, are self-contained (no external `$ref`s), and are cross-checked against the catalog. Families include `camelot-receipt/1`, `camelot-receipt-chain/1`, `camelot-task/1`, `camelot-tenant/1`, and more — covering receipts, ledger anchoring, workloads, policy decisions, personas, and the rest of the §11 contract catalog.
+All 34 schemas in `packages/contracts/` declare `$schema: https://json-schema.org/draft/2020-12/schema`, are self-contained (no external `$ref`s), and are cross-checked against the catalog. Families include `camelot-receipt/1`, `camelot-receipt-chain/1`, `camelot-task/1`, `camelot-tenant/1`, and more — covering receipts, ledger anchoring, workloads, policy decisions, personas, and the rest of the §11 contract catalog.
+
+## Contract Forge v1.3 additive foundation
+
+The reforge branch extends the existing v1.2 catalog without rewriting its wire contracts. New families preserve the persona-based digital-enterprise layer while keeping machine authority outside models and memory:
+
+- `camelot-soul/1` — persistent, model-independent persona identity
+- `camelot-enterprise-role/1` — department and relationship continuity
+- `camelot-spark/1` — short-lived compiled task context
+- `camelot-rune/1` — procedure only, never authority
+- `camelot-pill/1` — bounded possible executable reach
+- `camelot-memory-candidate/1` and `camelot-memory-object/1` — governed learning lifecycle
+- `camelot-effective-capability-set/1` — Sentinel-compiled executor projection
+
+The dedicated Contract Forge gate validates schema meta-conformance, canonical SHA-256 projection, Ed25519 domain-separated signatures, scope mutation rejection, lifecycle/expiry rejection, ceiling attenuation, Synthetos persona compatibility, and memory-activation provenance:
+
+```bash
+python harness/contracts/validate_contract_forge.py
+```
+
+See `docs/architecture/persona-enterprise-continuity.md`, `docs/architecture/contract-forge-signing-v1.md`, and `docs/reference/sir-synthetos-contract-profile.md`.
 
 ## The harness gate
 
@@ -41,7 +61,7 @@ Every build / PR / release must clear the gate before promotion. It backs the `r
 1. **replay-committed** — verify the committed golden receipts + ledger-anchor records from disk under the pinned TEST-ONLY signer key (a tampered/stale/missing artifact fails *before* any rebuild)
 2. **build** — rebuild + emit: schema conformance, §11.3 rules, 7-case tamper battery, ed25519-signed ledger anchoring (anchors at every Nth entry, default N=1000)
 3. **replay-emitted** — determinism loop (emitted set byte-identical to committed)
-4. **schema-meta** — all 26 schemas meta-validate as Draft 2020-12 + catalog conformance
+4. **schema-meta** — all 34 schemas meta-validate as Draft 2020-12 + catalog conformance
 
 ### Running it
 
