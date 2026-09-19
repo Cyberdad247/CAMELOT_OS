@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "name": "camelot-contracts",
   "version": "1.3.0",
-  "description": "Camelot-OS v1.2 canonical contract baseline plus additive v1.3 Contract Forge foundations for persistent persona identity, enterprise roles, Sparks, Runes, Pills, governed memory, and Sentinel-compiled effective capability sets. Existing v1.2 contract families remain unchanged.",
+  "description": "Camelot-OS v1.2 canonical contract baseline plus additive v1.3 Contract Forge foundations for persistent persona identity, enterprise roles, Sparks, Runes, Pills, governed memory, Sentinel-compiled effective capability sets, signed authority epochs, and signed Knight package admission. Existing v1.2 contract families remain unchanged.",
   "json_schema_dialect": "https://json-schema.org/draft/2020-12/schema",
   "schemas": [
     {
@@ -414,6 +414,37 @@
         "capabilities",
         "resource_scopes",
         "source_constraints",
+        "authority_semantics"
+      ]
+    },
+    {
+      "file": "authority-epoch.schema.json",
+      "$id": "https://camelot-os/schemas/authority-epoch.schema.json",
+      "schema_version": "camelot-authority-epoch/1",
+      "purpose": "Signed Crown authority-epoch certificate used for dynamic fencing at receipt/lease/admission boundaries.",
+      "key_fields_v13": [
+        "authority_domain",
+        "authority_epoch",
+        "active_brain",
+        "promotion_mode",
+        "receipt_head",
+        "state_digest",
+        "integrity"
+      ]
+    },
+    {
+      "file": "knight-package.schema.json",
+      "$id": "https://camelot-os/schemas/knight-package.schema.json",
+      "schema_version": "camelot-knight-package/1",
+      "purpose": "Signed immutable binding of Soul, persona competence profile, enterprise role, Runes/Pills, effect classes, and maximum ceilings; package is never authority.",
+      "key_fields_v13": [
+        "persona_id",
+        "soul_digest",
+        "persona_digest",
+        "enterprise_role_digest",
+        "allowed_effect_classes",
+        "max_risk_tier",
+        "max_cognition_ceiling",
         "authority_semantics"
       ]
     }
