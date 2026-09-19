@@ -15,7 +15,7 @@ The v1.2 documentation, contract, and evaluation package of **Camelot-OS / Cyber
 | `custodial_assimilation.md` | Assimilation crystal output derived from the repo |
 | `docs/architecture/` | Canonical architecture docs: repo alignment, harness gate checklist, open questions, trust bands, effect classes, glossary, northstar size budget |
 | `docs/threat-models/` | STRIDE threat model with fixture → production-gate traceability |
-| `packages/contracts/` | **34 published JSON Schemas** (Draft 2020-12, `camelot-*/1` families) + catalog `index.json` |
+| `packages/contracts/` | **36 published JSON Schemas** (Draft 2020-12, `camelot-*/1` families) + catalog `index.json` |
 | `harness/` | Verification harness: receipt-chain verifier, schema meta-validator, run-all gate, committed golden set |
 | `ops/bifrost-hub/` | Bifrost Hub control-plane bootstrap: init/bootstrap scripts, 3 hardened systemd services (registry, receipt, scheduler), deployment README |
 | `.github/workflows/` | CI — `harness-gate.yml` runs the full gate on every push / PR |
@@ -32,7 +32,7 @@ This package deliberately ships only the docs, contract schemas, and verificatio
 
 ## Contract schemas
 
-All 34 schemas in `packages/contracts/` declare `$schema: https://json-schema.org/draft/2020-12/schema`, are self-contained (no external `$ref`s), and are cross-checked against the catalog. Families include `camelot-receipt/1`, `camelot-receipt-chain/1`, `camelot-task/1`, `camelot-tenant/1`, and more — covering receipts, ledger anchoring, workloads, policy decisions, personas, and the rest of the §11 contract catalog.
+All 36 schemas in `packages/contracts/` declare `$schema: https://json-schema.org/draft/2020-12/schema`, are self-contained (no external `$ref`s), and are cross-checked against the catalog. Families include `camelot-receipt/1`, `camelot-receipt-chain/1`, `camelot-task/1`, `camelot-tenant/1`, and more — covering receipts, ledger anchoring, workloads, policy decisions, personas, and the rest of the §11 contract catalog.
 
 ## Contract Forge v1.3 additive foundation
 
@@ -54,6 +54,24 @@ python harness/contracts/validate_contract_forge.py
 
 See `docs/architecture/persona-enterprise-continuity.md`, `docs/architecture/contract-forge-signing-v1.md`, and `docs/reference/sir-synthetos-contract-profile.md`.
 
+## Sprint 2 — Authority closure
+
+The same reforge branch now adds the first executable authority-closure reference layer:
+
+- `camelot-authority-epoch/1` — signed current Crown epoch certificate for dynamic fencing
+- `camelot-knight-package/1` — signed immutable binding of Soul + persona + enterprise role + allowed Runes/Pills/effects + ceilings
+- `authority_admission.py` — rejects stale/future epochs, cross-tenant receipts, untrusted signers, and broken chain linkage before append
+- `knight_package_loader.py` — rejects Soul mutation, scope drift, revocation, persona/class drift, and policy-ceiling escalation
+- `validate_authority_closure.py` — adversarial conformance gate proving both paths
+
+```bash
+python harness/contracts/validate_authority_closure.py
+```
+
+The receipt schema already carried `authority_epoch`; Sprint 2 makes the admission rule executable against the currently verified signed epoch certificate. A Knight package remains identity/competence configuration only. Sentinel remains the service that may issue effect authority.
+
+See `docs/architecture/authority-closure-v1.md`.
+
 ## The harness gate
 
 Every build / PR / release must clear the gate before promotion. It backs the `receipt_chain_verified`, `tamper_detection_verified`, and `ledger_anchor_verified` production gates:
@@ -61,7 +79,7 @@ Every build / PR / release must clear the gate before promotion. It backs the `r
 1. **replay-committed** — verify the committed golden receipts + ledger-anchor records from disk under the pinned TEST-ONLY signer key (a tampered/stale/missing artifact fails *before* any rebuild)
 2. **build** — rebuild + emit: schema conformance, §11.3 rules, 7-case tamper battery, ed25519-signed ledger anchoring (anchors at every Nth entry, default N=1000)
 3. **replay-emitted** — determinism loop (emitted set byte-identical to committed)
-4. **schema-meta** — all 34 schemas meta-validate as Draft 2020-12 + catalog conformance
+4. **schema-meta** — all 36 schemas meta-validate as Draft 2020-12 + catalog conformance
 
 ### Running it
 
