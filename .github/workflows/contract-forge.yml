@@ -4,7 +4,7 @@ on:
   push:
     paths:
       - "packages/contracts/**"
-      - "harness/contracts/validate_contract_forge.py"
+      - "harness/contracts/**"
       - "docs/architecture/persona-enterprise-continuity.md"
       - "docs/architecture/contract-forge-signing-v1.md"
       - "docs/reference/sir-synthetos-contract-profile.md"
@@ -12,7 +12,7 @@ on:
   pull_request:
     paths:
       - "packages/contracts/**"
-      - "harness/contracts/validate_contract_forge.py"
+      - "harness/contracts/**"
       - "docs/architecture/persona-enterprise-continuity.md"
       - "docs/architecture/contract-forge-signing-v1.md"
       - "docs/reference/sir-synthetos-contract-profile.md"
@@ -39,3 +39,6 @@ jobs:
 
       - name: Validate Contract Forge
         run: python harness/contracts/validate_contract_forge.py
+
+      - name: Validate Authority Closure
+        run: python harness/contracts/validate_authority_closure.py
