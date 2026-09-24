@@ -1,0 +1,122 @@
+{
+  "generated_at": "2026-09-24T03:49:46.107661+00:00",
+  "root": "/home/hatch/workspace/CAMELOT_OS/.agent",
+  "file_count": 23,
+  "files": [
+    {
+      "path": "Anya.md",
+      "size": 504,
+      "sha256": "d4ed3baea17e3b4c33ad13e0132088e3c880da7ca942a7c03dd87c9c95d73562"
+    },
+    {
+      "path": "Artifacts.md",
+      "size": 528,
+      "sha256": "103cc1224ea69c63aa43ae1ed269e0b1aa37810b4f6dbe2dd5f15e54ac20d985"
+    },
+    {
+      "path": "Blueprint-os.md",
+      "size": 396,
+      "sha256": "9b2425d2e2481ba3b56e60fc1aa983137d5c5993b9742bb142ef484f85e8d63c"
+    },
+    {
+      "path": "HiveIDE.md",
+      "size": 481,
+      "sha256": "861469181585b50bf65344f97bc549afca7a853d266989a54f8da9f56e630844"
+    },
+    {
+      "path": "Inspira.md",
+      "size": 635,
+      "sha256": "4516e9d4aba4dddac6852ea534daf12bf94ab78351090f91116d955197a50c40"
+    },
+    {
+      "path": "Merlin.md",
+      "size": 473,
+      "sha256": "bb9bfd3dba9c4d8c0bf21d59f2f7cb5a2d114a8bd61cddb5b0ad4aa44763ae45"
+    },
+    {
+      "path": "VFS Preflight.md",
+      "size": 1627,
+      "sha256": "a41bf2c5dd038105458b5a2dcbf8e0378a84bdcb6b821deb18ee730d98008c36"
+    },
+    {
+      "path": "agents.md",
+      "size": 928,
+      "sha256": "939ca7fb5a9c73fdad302ba93d4d18e72d511cb7ecde1ad53bb08df4e56aca43"
+    },
+    {
+      "path": "camelot-os max version.md",
+      "size": 572,
+      "sha256": "623b3396f9b7637f0648d4c6d6fdfa2c35fcdcf09285842969f68aed6e05d79f"
+    },
+    {
+      "path": "digitalfactory.md",
+      "size": 441,
+      "sha256": "a9d6d4296df3a927d73b6b7b437309bb11240babeccfa44100d8c373c46d838f"
+    },
+    {
+      "path": "harnesses.md",
+      "size": 495,
+      "sha256": "f821ecc2ca5a34fdc76fbcf3ac8497671024a750f7ea0c6498cc9428d02430d4"
+    },
+    {
+      "path": "kickbox audio.md",
+      "size": 425,
+      "sha256": "b4183c8da85ca59d5174609ab501feb4cf3d70a024cffd45c9d0e80dc7f3cd0f"
+    },
+    {
+      "path": "knight roster.md",
+      "size": 1154,
+      "sha256": "f058d58acfe3d519654ae69c5980b7cc9520846762286de198c01123e103c329"
+    },
+    {
+      "path": "mcp.md",
+      "size": 431,
+      "sha256": "a4111d83aec5c9daffa050ebbf23ebf01126f1f791db5baf98583b52210002e5"
+    },
+    {
+      "path": "merlinss oftware agency.md",
+      "size": 403,
+      "sha256": "c9e39908c3e66b738c7e85b71429764d75041dbfda8e9883d2559c1bcffd2223"
+    },
+    {
+      "path": "protocols.md",
+      "size": 622,
+      "sha256": "5d2db76b3d62c15a83cf1ab9a1f3c060c2c30f1fe91a6cd55d4f80911aff355d"
+    },
+    {
+      "path": "skills.md",
+      "size": 574,
+      "sha256": "29bb5d2e9a03916acb92e4a4f49a712b40035cb524d3b6ae968e4c7a68e3eed1"
+    },
+    {
+      "path": "symbollect.md",
+      "size": 782,
+      "sha256": "8197933055b03f1e127d837656ecc2e2cd1bccb9d3d5fdc7f4d2489496d336ef"
+    },
+    {
+      "path": "task.md",
+      "size": 648,
+      "sha256": "6f92f9e4cc46d55cf2600ed8206d571bd36d0acd61780bf43d2629a9404c6bc1"
+    },
+    {
+      "path": "verification.md",
+      "size": 753,
+      "sha256": "8c22bc4ab44e7b05e5b35f3366b755bdfbc0b418be8870c6955b4b4fc7d667af"
+    },
+    {
+      "path": "vfs-audit.py",
+      "size": 3576,
+      "sha256": "557ec7b731c424471e2e12e060918b7204726617c8a12b2214122e253e7be77b"
+    },
+    {
+      "path": "workflows.md",
+      "size": 605,
+      "sha256": "46ef24584750097e1587d085773ca8597205566df173a07f18f9d72727d4c9b3"
+    },
+    {
+      "path": "worldtree.md",
+      "size": 1522,
+      "sha256": "84c709bc079f556c7d06cbb0590a9482d6530f7194fb5017a2fd1a839d2e8a96"
+    }
+  ]
+}
